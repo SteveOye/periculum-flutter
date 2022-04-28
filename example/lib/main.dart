@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/GetAffordabilityResponse.dart';
 import 'package:flutter_periculum/models/TransactionStatementResponse.dart';
 
 void main() async {
@@ -31,6 +32,7 @@ class _MyAppState extends State<MyApp> {
   // bool _statementResponse = false;
   late List<ExisitingCreditResponse> creditResponse;
   late List<TransactionStatementResponse> statementResponse;
+  late List<GetAffordabilityResponse> getAffordabilityResponse;
 
   @override
   void initState() {
@@ -185,19 +187,19 @@ class _MyAppState extends State<MyApp> {
                           });
                           var response;
                           try {
-                            response =
-                                await FlutterPericulum.statementTransaction(
+                            response = await FlutterPericulum
+                                    .getExisitingStatementAffordabilityAnalysis(
                                         token: "${dotenv.env['tokenKey']}",
                                         statementKey: "125")
-                                    .then((value) => {
-                                          setState(() {
-                                            isLoading = false;
-                                            statementResponse = value;
-                                            debugPrint(statementResponse[1]
-                                                .date
-                                                .toString());
-                                          }),
-                                        });
+                                .then((value) => {
+                                      setState(() {
+                                        isLoading = false;
+                                        getAffordabilityResponse = value;
+                                        debugPrint(getAffordabilityResponse[2]
+                                            .createdDate
+                                            .toString());
+                                      }),
+                                    });
                           } on PlatformException {
                             setState(() {
                               isLoading = false;

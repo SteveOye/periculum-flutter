@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/GetAffordabilityResponse.dart';
 import 'package:flutter_periculum/models/TransactionStatementResponse.dart';
 
 class FlutterPericulum {
@@ -136,5 +137,24 @@ class FlutterPericulum {
     } catch (e) {
       throw '{"status": false, "error": ${e.toString()}}';
     }
+  }
+
+  static Future<List<GetAffordabilityResponse>>
+      getExisitingStatementAffordabilityAnalysis({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getAffordabilityAnalysis', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    List<GetAffordabilityResponse> responseList;
+
+    responseList = (json.decode(response) as List)
+        .map((i) => GetAffordabilityResponse.fromJson(i))
+        .toList();
+
+    return responseList;
   }
 }

@@ -187,8 +187,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
             }
-        } else if (call.method == "getExistingCreditScore"){ // Pending task
-            print("getExistingCreditScore..")
+        } else if (call.method == "getExistingCreditScore"){ 
             val args = call.arguments as HashMap<String, Any>
             if (args != null) {
                 var token = args.get("token")
@@ -215,7 +214,33 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 })
 
             }
-        }else if (call.method == "generateMobileDataAnalysis") {
+        } else if (call.method == "getAffordabilityAnalysis"){  
+            val args = call.arguments as HashMap<String, Any>
+            if (args != null) {
+                var token = args.get("token")
+                var key = args.get("statementKey")
+
+                var url = "$BASE_URL/affordability/$key"
+
+                val client = OkHttpClient()
+                var request = Request.Builder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .url(url)
+                    .build()
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onResponse(call: Call, response: Response) {
+                        val callResponse = response.body!!.string()
+                        result.success("$callResponse");
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        val error = e.message
+                        result.success("{\"title\": \"${error}\"}")
+                    }
+                })
+
+            }
+        } else if (call.method == "generateMobileDataAnalysis") {
             GlobalScope.launch(Dispatchers.IO) {
                 if (!isLocationAndReadSMSPermissionGranted()) {
                     async { requestLocationAndReadSMSPermissions() }
