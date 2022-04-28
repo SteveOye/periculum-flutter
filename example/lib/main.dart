@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/TransactionStatementResponse.dart';
 
 void main() async {
   await dotenv.load();
@@ -29,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   bool _response = false;
   // bool _statementResponse = false;
   late List<ExisitingCreditResponse> creditResponse;
+  late List<TransactionStatementResponse> statementResponse;
 
   @override
   void initState() {
@@ -184,15 +186,15 @@ class _MyAppState extends State<MyApp> {
                           var response;
                           try {
                             response =
-                                await FlutterPericulum.getExisitingCreditScore(
+                                await FlutterPericulum.statementTransaction(
                                         token: "${dotenv.env['tokenKey']}",
-                                        statementKey: "123")
+                                        statementKey: "125")
                                     .then((value) => {
                                           setState(() {
                                             isLoading = false;
-                                            creditResponse = value;
-                                            debugPrint(creditResponse[0]
-                                                .baseScore
+                                            statementResponse = value;
+                                            debugPrint(statementResponse[1]
+                                                .date
                                                 .toString());
                                           }),
                                         });

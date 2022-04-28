@@ -12,27 +12,6 @@ String transactionStatementResponseToJson(TransactionStatementResponse data) =>
 
 class TransactionStatementResponse {
   TransactionStatementResponse({
-    required this.status,
-    required this.data,
-  });
-
-  bool status;
-  List<Datum> data;
-
-  factory TransactionStatementResponse.fromJson(Map<String, dynamic> json) =>
-      TransactionStatementResponse(
-        status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
-}
-
-class Datum {
-  Datum({
     required this.date,
     required this.amount,
     required this.type,
@@ -41,14 +20,15 @@ class Datum {
   });
 
   String date;
-  double amount;
+  num amount;
   String type;
   String description;
   double balance;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory TransactionStatementResponse.fromJson(Map<String, dynamic> json) =>
+      TransactionStatementResponse(
         date: json["date"],
-        amount: json["amount"].toDouble(),
+        amount: json["amount"],
         type: json["type"],
         description: json["description"],
         balance: json["balance"].toDouble(),
